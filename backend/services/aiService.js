@@ -1,4 +1,4 @@
-const { GoogleGenerativeAI } = require('@google/generative-ai');
+const Groq = require('groq-sdk');
 const KnowledgeEntry = require('../models/KnowledgeEntry');
 const FAQ = require('../models/FAQ');
 const Course = require('../models/Course');
@@ -12,7 +12,7 @@ const TransportInfo = require('../models/TransportInfo');
 const LibraryInfo = require('../models/LibraryInfo');
 const Department = require('../models/Department');
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 const fetchInstitutionContext = async (institutionId, query) => {
   const [
@@ -108,8 +108,6 @@ const fetchInstitutionContext = async (institutionId, query) => {
 };
 
 const generateChatResponse = async (institutionName, institutionContext, conversationHistory, userMessage) => {
-  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-
   const systemPrompt = `You are an intelligent AI assistant for ${institutionName}. 
 You ONLY answer questions based on the institution data provided to you. 
 You do NOT have knowledge of any other institution.
@@ -128,21 +126,31 @@ IMPORTANT RULES:
 - Be warm and helpful in tone
 - If asked about fees, always mention the rupee amounts available in the data`;
 
-  const history = conversationHistory.map(msg => ({
-    role: msg.role === 'assistant' ? 'model' : 'user',
-    parts: [{ text: msg.content }],
-  }));
+  // Format history for Groq (OpenAI format)
+  const messages = [
+    { role: 'system', content: systemPrompt },
+    ...conversationHistory.map(msg => ({
+      role: msg.role, // 'user' or 'assistant'
+      content: msg.content
+    })),
+    { role: 'user', content: userMessage }
+  ];
 
-  const chat = model.startChat({
-    history: [
-      { role: 'user', parts: [{ text: systemPrompt }] },
-      { role: 'model', parts: [{ text: `Understood! I'm the AI assistant for ${institutionName}. I'll only answer based on the institution data provided. How can I help you?` }] },
-      ...history,
-    ],
-  });
+  try {
+    const chatCompletion = await groq.chat.completions.create({
+      messages,
+      model: "llama-3.3-70b-versatile",
+      temperature: 0.7,
+      max_tokens: 1024,
+      top_p: 1,
+      stream: false,
+    });
 
-  const result = await chat.sendMessage(userMessage);
-  return result.response.text();
+    return chatCompletion.choices[0]?.message?.content || "I apologize, but I could not generate a response. Please try again.";
+  } catch (error) {
+    console.error("Groq API Error:", error);
+    throw new Error("Failed to generate response from AI provider.");
+  }
 };
 
 module.exports = { fetchInstitutionContext, generateChatResponse };

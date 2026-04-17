@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '../context/AuthContext'
 import { useState } from 'react'
 import { Menu, X, GraduationCap, ChevronDown, LogOut, User, LayoutDashboard, MessageSquare } from 'lucide-react'
+import NavHeader from './ui/NavHeader'
 
 export default function Navbar() {
   const { user, logout } = useAuth()
@@ -27,18 +28,16 @@ export default function Navbar() {
   return (
     <header className="fixed top-0 left-0 right-0 z-40">
       <div className="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-xl">
-        <div className="page-container flex items-center justify-between h-16">
+        <div className="page-container flex items-center justify-between h-16 sm:h-20">
           <Link to="/" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-brand-500 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-brand-500 flex items-center justify-center shadow-lg shadow-brand-500/20">
               <GraduationCap className="w-5 h-5 text-white" />
             </div>
             <span className="text-white font-bold text-lg tracking-tight">CampusAtlas <span className="text-brand-400">AI</span></span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-1">
-            {navLinks.map(link => (
-              <a key={link.href} href={link.href} className="btn-ghost text-slate-400 hover:text-slate-200 text-sm">{link.label}</a>
-            ))}
+          <nav className="hidden md:flex items-center">
+            <NavHeader links={navLinks} />
           </nav>
 
           <div className="hidden md:flex items-center gap-3">

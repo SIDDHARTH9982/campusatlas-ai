@@ -61,6 +61,6 @@ A multi-tenant AI chatbot SaaS platform for schools, colleges, and universities.
 - Full multi-tenant data isolation.
 - `institutionId` enforcement across all 15+ data models.
 - JWT Role-based guards (`superadmin`, `institutionAdmin`, `student`).
-- Gemini AI RAG service fetching tailored context for the selected institution.
+- Multi-tenant RAG service fetching tailored context for the selected institution.
 - Interactive multi-session chat history.
 - Original premium deep-space dark UI design.

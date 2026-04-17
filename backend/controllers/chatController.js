@@ -2,7 +2,7 @@ const ChatSession = require('../models/ChatSession');
 const ChatMessage = require('../models/ChatMessage');
 const Institution = require('../models/Institution');
 const StudentPurchase = require('../models/StudentPurchase');
-const { fetchInstitutionContext, generateChatResponse } = require('../services/geminiService');
+const { fetchInstitutionContext, generateChatResponse } = require('../services/aiService');
 
 const getSelectedInstitution = async (userId) => {
   const purchase = await StudentPurchase.findOne({ userId, status: 'completed' });

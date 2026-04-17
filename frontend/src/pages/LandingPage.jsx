@@ -5,6 +5,53 @@ import {
   ArrowRight, Zap, Shield, BarChart2, BookOpen, Star, ChevronDown
 } from 'lucide-react'
 import { useState } from 'react'
+import ScrollGlobe from '../components/ui/ScrollGlobe'
+import { HighlightText } from '../components/ui/AnimatedRevealText'
+
+const globeSections = [
+  {
+    id: "hero",
+    badge: "Welcome",
+    title: "CampusAtlas AI",
+    subtitle: "The AI Platform Built for Education",
+    description: "Give schools, colleges, and universities their own intelligent knowledge hub. Students pay once, explore all institutions, and get instant scoped answers.",
+    align: "left",
+    actions: [
+      { label: "Get started free", variant: "primary", onClick: () => window.location.href = '/signup' },
+      { label: "Explore institutions", variant: "secondary", onClick: () => window.location.href = '/institutions' },
+    ]
+  },
+  {
+    id: "innovation",
+    badge: "Multi-Tenant",
+    title: "Strict Data Isolation",
+    description: "Every institution's data is fully isolated. The chatbot answers strictly from the selected institution's data. No hallucinations. No cross-institution leaks.",
+    align: "center",
+  },
+  {
+    id: "discovery",
+    badge: "Scale",
+    title: "Rich Knowledge",
+    subtitle: "Management",
+    description: "Admins manage courses, fees, placements, hostel, FAQs, notices, faculty, and 15+ more categories with ease.",
+    align: "left",
+    features: [
+      { title: "Limitless Exploration", description: "Discover new dimensions of possibility and innovation" },
+      { title: "Instant Intelligent Answers", description: "Powered by AI. Handles Hinglish, spelling errors, and student-style questions with grace." }
+    ]
+  },
+  {
+    id: "future",
+    badge: "Access",
+    title: "One-Time",
+    subtitle: "Student Access",
+    description: "Students pay once and get access to all active institutions on the platform. Browse, search, and switch freely without recurring subscriptions.",
+    align: "center",
+    actions: [
+      { label: "Get Student Access", variant: "primary", onClick: () => window.location.href = '/signup' }
+    ]
+  }
+];
 
 const fadeUp = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0 } }
 
@@ -13,7 +60,7 @@ const features = [
   { icon: MessageSquare, title: 'Institution-Scoped AI Chat', desc: 'The chatbot answers strictly from the selected institution\'s data. No hallucinations. No cross-institution leaks.' },
   { icon: Shield, title: 'Strict Data Isolation', desc: 'Every institution\'s data is fully isolated. Institution admins can only see their own data.' },
   { icon: BarChart2, title: 'Rich Knowledge Management', desc: 'Admins manage courses, fees, placements, hostel, FAQs, notices, faculty, and 15+ more categories.' },
-  { icon: Zap, title: 'Instant Intelligent Answers', desc: 'Powered by Gemini AI. Handles Hinglish, spelling errors, and student-style questions with grace.' },
+  { icon: Zap, title: 'Instant Intelligent Answers', desc: 'Powered by Advanced AI. Handles Hinglish, spelling errors, and student-style questions with grace.' },
   { icon: BookOpen, title: 'Comprehensive Institution Profiles', desc: 'Each institution gets a full profile covering admissions, campus life, scholarships, library, transport, and more.' },
 ]
 
@@ -36,97 +83,14 @@ export default function LandingPage() {
 
   return (
     <div className="overflow-x-hidden">
-      {/* Hero */}
-      <section className="relative min-h-[92vh] flex items-center">
-        <div className="absolute inset-0 bg-gradient-to-b from-brand-950/20 via-transparent to-transparent pointer-events-none" />
-        <div className="absolute top-32 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-brand-500/5 rounded-full blur-3xl pointer-events-none" />
-        <div className="page-container py-24 relative z-10">
-          <motion.div
-            variants={fadeUp} initial="hidden" animate="show"
-            transition={{ duration: 0.6 }}
-            className="max-w-3xl mx-auto text-center"
-          >
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-tight mb-6">
-              The AI Platform Built for{' '}
-              <span className="gradient-text">Education</span>
-            </h1>
-            <p className="text-slate-400 text-xl leading-relaxed mb-10 max-w-2xl mx-auto">
-              CampusAtlas AI gives schools, colleges, and universities their own intelligent knowledge hub. Students pay once, explore all institutions, and get instant scoped answers.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/signup" className="btn-primary text-base px-7 py-3 shadow-brand">
-                Get started free <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link to="/institutions" className="btn-secondary text-base px-7 py-3">
-                Explore institutions
-              </Link>
-            </div>
-          </motion.div>
-
-          {/* Dashboard Preview */}
-          <motion.div
-            initial={{ opacity: 0, y: 48 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.7 }}
-            className="mt-20 relative max-w-5xl mx-auto"
-          >
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent pointer-events-none z-10" />
-            <div className="surface shadow-glass overflow-hidden">
-              <div className="bg-slate-900 border-b border-slate-800 flex items-center gap-2 px-4 py-3">
-                <div className="flex gap-1.5">
-                  <div className="w-3 h-3 rounded-full bg-red-500/50" />
-                  <div className="w-3 h-3 rounded-full bg-amber-500/50" />
-                  <div className="w-3 h-3 rounded-full bg-emerald-500/50" />
-                </div>
-                <div className="flex-1 flex justify-center">
-                  <div className="bg-slate-800 rounded-md px-4 py-1 text-slate-500 text-xs">campusatlas.ai/chat</div>
-                </div>
-              </div>
-              <div className="grid grid-cols-4 gap-0 h-72">
-                <div className="col-span-1 bg-slate-900 border-r border-slate-800 p-3">
-                  <div className="space-y-1">
-                    {['Dashboard', 'AI Chat', 'Institutions', 'Notices'].map((item, i) => (
-                      <div key={i} className={`flex items-center gap-2 px-2 py-2 rounded-lg text-xs ${i === 1 ? 'bg-brand-500/15 text-brand-400' : 'text-slate-500'}`}>
-                        <div className="w-3 h-3 rounded bg-slate-700" />{item}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="col-span-3 p-4 flex flex-col gap-3">
-                  <div className="flex items-center gap-2 pb-3 border-b border-slate-800">
-                    <div className="w-6 h-6 rounded bg-brand-500/20 flex items-center justify-center">
-                      <GraduationCap className="w-3 h-3 text-brand-400" />
-                    </div>
-                    <span className="text-slate-300 text-xs font-medium">Meridian Institute of Technology</span>
-                    <span className="ml-auto text-xs text-brand-400 bg-brand-500/10 px-2 py-0.5 rounded-full">Active</span>
-                  </div>
-                  <div className="flex gap-2">
-                    <div className="flex-1 bg-slate-800 rounded-lg p-3">
-                      <p className="text-slate-500 text-xs mb-1">Question</p>
-                      <p className="text-slate-300 text-xs">What is the fee for B.Tech CSE?</p>
-                    </div>
-                  </div>
-                  <div className="bg-slate-800/60 border border-slate-700 rounded-lg p-3">
-                    <p className="text-slate-500 text-xs mb-1.5 flex items-center gap-1"><Zap className="w-3 h-3 text-brand-400" /> CampusAtlas AI</p>
-                    <p className="text-slate-300 text-xs leading-relaxed">The annual fee for <strong className="text-white">B.Tech CSE</strong> at Meridian Institute is <strong className="text-brand-400">₹1,85,000/year</strong>, which includes tuition (₹1,50,000), registration (₹10,000), exam (₹5,000), library (₹5,000), and sports fees (₹3,000).</p>
-                  </div>
-                  <div className="flex gap-2 mt-auto">
-                    {['Admission dates', 'Hostel fees', 'Placement stats'].map((chip, i) => (
-                      <span key={i} className="px-2.5 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-400 text-xs">{chip}</span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      {/* Interactive Globe Hero */}
+      <ScrollGlobe sections={globeSections} />
 
       {/* Social proof strip */}
       <section className="border-y border-slate-800 py-6">
         <div className="page-container">
           <div className="flex flex-wrap items-center justify-center gap-8 text-slate-500 text-sm">
-            {['NAAC Accredited Institutions', 'Gemini AI Powered', 'Multi-Tenant Isolated', 'One-Time Student Access', 'Real-Time Data Sync'].map((t, i) => (
+            {['NAAC Accredited Institutions', 'Advanced AI Powered', 'Multi-Tenant Isolated', 'One-Time Student Access', 'Real-Time Data Sync'].map((t, i) => (
               <div key={i} className="flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-emerald-500" />{t}
               </div>
@@ -280,6 +244,16 @@ export default function LandingPage() {
               </div>
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      <section className="py-64 relative z-50 bg-slate-950">
+        <div className="page-container flex justify-center">
+          <HighlightText 
+            text="I love CampusAtlas" 
+            textClassName="text-4xl sm:text-5xl md:text-6xl"
+            highlightColor="#6366f1"
+          />
         </div>
       </section>
     </div>

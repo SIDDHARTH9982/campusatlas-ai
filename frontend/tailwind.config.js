@@ -31,6 +31,7 @@ export default {
         'fade-in': 'fadeIn 0.4s ease-out',
         'slide-up': 'slideUp 0.4s ease-out',
         'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'fadeOut': 'fadeOutLabel 2s ease-out forwards',
       },
       keyframes: {
         fadeIn: {
@@ -40,6 +41,11 @@ export default {
         slideUp: {
           '0%': { opacity: '0', transform: 'translateY(16px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        fadeOutLabel: {
+          '0%': { opacity: '1', transform: 'translateX(0) scale(1)' },
+          '70%': { opacity: '1', transform: 'translateX(0) scale(1)' },
+          '100%': { opacity: '0', transform: 'translateX(0.5rem) scale(0.95)' },
         },
       },
       boxShadow: {
