@@ -14,3 +14,23 @@ export default defineConfig({
     }
   }
 })
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+
+export default defineConfig({
+  plugins: [react()],
+  server: {
+<<<<<<< HEAD
+    port: 5174,
+    strictPort: true,
+=======
+    port: 5173,
+>>>>>>> origin/main
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+      }
+    }
+  }
+})
